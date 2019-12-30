@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import {Context} from '../context/ProductContext';
 import axios from 'axios';
 
 export default function Product() {
   
   const [payload, setPayload] = useState({});
+  const [success, setSuccess] = useContext(Context);
 
   const handleKeyup = (e) => {
     setPayload({
@@ -19,11 +21,11 @@ export default function Product() {
   }
 
   const handleSubmit = () => {
-    
     axios
       .post('api/product/create', payload)
       .then(res => {
-        console.log(res)
+        setSuccess(true)
+        console.log(res.data.status)
       })
   }
   

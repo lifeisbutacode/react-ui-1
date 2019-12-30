@@ -1,24 +1,29 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react';
+import {Context} from '../context/ProductContext';
 import axios from 'axios'
 
 export default function List() {
 
   let products = "";
   const [body, setBody] = useState({});
+  const [success, setSuccess] = useContext(Context);
+  const fetchProduct = () => {
+    axios
+    .get('api/product')
+    .then(res => {
+      setBody(res.data.body);
+      setSuccess(false);
+    });
+  }
 
   useEffect(() => {
-    axios
-      .get('api/product')
-      .then(res => {
-        console.log(res.data.body)
-        setBody(res.data.body);
-      });
-  }, [])
+    fetchProduct();
+  }, [success]);
   
   // Product list exists
   if(body.length >= 1) {
     products = body.map((i) => 
-      <tr>
+      <tr key={i.id}>
         <td> {i.name.toUpperCase()} </td>
         <td> {i.description.toUpperCase()} </td>
         <td> {i.price} </td>
